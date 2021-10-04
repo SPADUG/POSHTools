@@ -1,7 +1,6 @@
 @{
     PSDependOptions = @{
-        Target = '$PWD\Dependencies'
-        AddToPath = $true
+        Target = 'CurrentUser'
     }
     'Pester' = @{
         Version = '5.1.1'

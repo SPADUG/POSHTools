@@ -45,16 +45,17 @@ Function Clear-VHDXProfile
 
         foreach ($VHDXFile in $VHDXFiles)
         {
-            $VHDXFile -match '(S-.*).vhdx'
-            $VHDXUid = $Matches[1]
-            Write-Verbose ('[{0:O}] Convert {1} to AD User' -f (Get-Date), $VHDXUid)
-            try {
-                $ADUser = Convert-User2SID -SID $VHDXUid
-                Write-Verbose ('[{0:O}] {1} found in AD => nothing to do !' -f (get-date),$ADUser)
-            }
-            catch {
-                Write-Warning ('[{0:O}] {1} not found in AD => delete vhdx profile !' -f (get-date),$VHDXUid)
-                remove-item -path $VHDXFile -force -Confirm:$false
+            if ($VHDXFile -match '(S-.*).vhdx') {
+                $VHDXUid = $Matches[1]
+                Write-Verbose ('[{0:O}] Convert {1} to AD User' -f (Get-Date), $VHDXUid)
+                try {
+                    $ADUser = Convert-User2SID -SID $VHDXUid
+                    Write-Verbose ('[{0:O}] {1} found in AD => nothing to do !' -f (get-date),$ADUser)
+                }
+                catch {
+                    Write-Warning ('[{0:O}] {1} not found in AD => delete vhdx profile !' -f (get-date),$VHDXUid)
+                    remove-item -path $VHDXFile -force -Confirm:$false
+                }
             }
         }
     }
